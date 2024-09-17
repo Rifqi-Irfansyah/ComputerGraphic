@@ -24,17 +24,24 @@ def scale2D(sx, sy, refx, refy, tm):
     m[1][2] = (1 - sy) * refy
     return np.dot(m, tm)
 
-def rotate2D(a, refx, refy):
-    m = np.identity(3)
-    tm = np.identity(3)
+def rotate2D(x, y, a, refx, refy):
     a = np.radians(a)
-    m[0][0] = math.cos(a)
-    m[0][1] = -math.sin(a)
-    m[0][2] = refx * (1 - math.cos(a)) + refy * math.sin(a)
-    m[1][0] = math.sin(a)
-    m[1][1] = math.cos(a)
-    m[1][2] = refy * (1 - math.cos(a)) - refx * math.sin(a)
-    return np.dot(m, tm)
+    cos_a = math.cos(a)
+    sin_a = math.sin(a)
+    
+    # Translate point to origin relative to refx, refy
+    x -= refx
+    y -= refy
+    
+    # Rotate point
+    xr = x * cos_a - y * sin_a
+    yr = x * sin_a + y * cos_a
+    
+    # Translate point back
+    x_new = xr + refx
+    y_new = yr + refy
+    
+    return x_new, y_new
 
 def transformPoints2D(pts, tm):
     i, _ = pts.shape

@@ -188,7 +188,21 @@ def draw_ellipse(x, y, Rx, Ry, style=None, angle=0):
         print("Maaf, style tidak ada")
     return(points)
 
-def rotate_point(x, y, angle):
+# def rotate_point(x, y, angle):
+    
+def rotate2D(a, refx, refy):
+    m = np.identity(3)
+    tm = np.identity(3)
+    a = np.radians(a)
+    m[0][0] = math.cos(a)
+    m[0][1] = -math.sin(a)
+    m[0][2] = refx * (1 - math.cos(a)) + refy * math.sin(a)
+    m[1][0] = math.sin(a)
+    m[1][1] = math.cos(a)
+    m[1][2] = refy * (1 - math.cos(a)) - refx * math.sin(a)
+    return np.dot(m, tm)
+    
+    
     """Rotates a point (x, y) by a given angle."""
     new_x = x * np.cos(angle) - y * np.sin(angle)
     new_y = x * np.sin(angle) + y * np.cos(angle)
@@ -205,28 +219,55 @@ def ellipse_plot_points(xc, yc, x, y, angle):
     # Return the rotated points, adjusted to the center (xc, yc)
     return [(xc + x1, yc + y1), (xc + x2, yc + y2), (xc + x3, yc + y3), (xc + x4, yc + y4)]
 
-def solid_ellipse(xc, yc, Rx, Ry, angle=0):
-    """Draws an ellipse with semi-major axis Rx and semi-minor axis Ry at an angle."""
-    points = []
+def bresenham_ellipse(rx, ry, xc, yc):
+    ellipse_points = []
+    
     x = 0
-    y = Ry
-    Rx2 = Rx * Rx
-    Ry2 = Ry * Ry
+    y = ry
+    rx2 = rx * rx
+    ry2 = ry * ry
+    tworx2 = 2 * rx2
+    twory2 = 2 * ry2
     px = 0
-    py = 2 * Rx2 * y
-
-    p1 = Ry2 - (Rx2 * Ry) + (0.25 * Rx2)
+    py = tworx2 * y
+    
+    # Region 1
+    p = ry2 - (rx2 * ry) + (0.25 * rx2)
+    
     while px < py:
-        # Get rotated ellipse points
-        points.extend(ellipse_plot_points(xc, yc, x, y, angle))
+        ellipse_points.append((x + xc, y + yc))
+        ellipse_points.append((-x + xc, y + yc))
+        ellipse_points.append((x + xc, -y + yc))
+        ellipse_points.append((-x + xc, -y + yc))
+        
         x += 1
-        px += 2 * Ry2
-        if p1 < 0:
-            p1 += Ry2 + px
+        px += twory2
+        if p < 0:
+            p += ry2 + px
         else:
             y -= 1
-            py -= 2 * Rx2
-            p1 += Ry2 + px - py
+            py -= tworx2
+            p += ry2 + px - py
+    
+    # Region 2
+    p = ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2
+    
+    while y >= 0:
+        ellipse_points.append((x + xc, y + yc))
+        ellipse_points.append((-x + xc, y + yc))
+        ellipse_points.append((x + xc, -y + yc))
+        ellipse_points.append((-x + xc, -y + yc))
+        
+        y -= 1
+        py -= tworx2
+        if p > 0:
+            p += rx2 - py
+        else:
+            x += 1
+            px += twory2
+            p += rx2 - py + px
+    
+    return ellipse_points
 
     p2 = Ry2 * (x + 0.5) ** 2 + Rx2 * (y - 1) ** 2 - Rx2 * Ry2
     while y >= 0:

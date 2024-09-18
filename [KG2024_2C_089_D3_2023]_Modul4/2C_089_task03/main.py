@@ -61,82 +61,92 @@ class Bunga:
         py5.stroke(*self.color)
         
         i = 0
-        while i <= 0.2:
+        while i <= 2:
             self.lingkaran_tengah(self.radius_lingkaran + i)
             self.kelopak_bunga(self.radius_lingkaran * 2 + i, self.radius_lingkaran + i)
             i += 0.2
             
     def gambar_bunga_translasi(self, time):
+        py5.stroke(*self.color)
         updateTranslasi(time)
-        circle_points = basic.draw_circle(self.radius_lingkaran, self.xc, self.yc, self.pattern)
-        tm = tf.translate2D(translasi_x, translasi_y)
-        translasi = tf.transformPoints2D(circle_points, tm)
         
-        for x, y in translasi:
-            py5.point(x  , y )
-
-
-
-        Rx = self.radius_lingkaran * 2 
-        Ry = self.radius_lingkaran  
-        
-        ellipse_points = basic.draw_patterned_ellipse(Rx, Ry, self.xc, self.yc, self.pattern)
-        
-        anchor_radius = min(Rx, Ry) + self.radius_lingkaran# Adjust as needed
-        angle_step = 360 / self.jumlah_kelopak
-        
-        angle = 0 + angle_dinamis
-        for i in range (self.jumlah_kelopak):
-            # ROTATE
-            rotated_ellipse = [tf.rotate2D(x, y, angle, self.xc, self.yc) for x, y in ellipse_points]
+        a=0
+        while a <= 2:
+            circle_points = basic.draw_circle(self.radius_lingkaran+a, self.xc, self.yc, self.pattern)
             tm = tf.translate2D(translasi_x, translasi_y)
-            translasi = tf.transformPoints2D(rotated_ellipse, tm)
+            translasi = tf.transformPoints2D(circle_points, tm)
             
-            # DRAW
             for x, y in translasi:
-                py5.point(x + anchor_radius * np.cos(np.deg2rad(angle)) , y + anchor_radius * np.sin(np.deg2rad(angle)))
+                py5.point(x  , y )
+
+
+
+            Rx = self.radius_lingkaran * 2 +a 
+            Ry = self.radius_lingkaran  +a
             
-            angle += angle_step
-            angle = angle % 360
+            ellipse_points = basic.draw_patterned_ellipse(Rx, Ry, self.xc, self.yc, self.pattern)
+            
+            anchor_radius = min(Rx, Ry) + self.radius_lingkaran +a# Adjust as needed
+            angle_step = 360 / self.jumlah_kelopak
+            
+            angle = 0 + angle_dinamis
+            for i in range (self.jumlah_kelopak):
+                # ROTATE
+                rotated_ellipse = [tf.rotate2D(x, y, angle, self.xc, self.yc) for x, y in ellipse_points]
+                tm = tf.translate2D(translasi_x, translasi_y)
+                translasi = tf.transformPoints2D(rotated_ellipse, tm)
+                
+                # DRAW
+                for x, y in translasi:
+                    py5.point(x + anchor_radius * np.cos(np.deg2rad(angle)) , y + anchor_radius * np.sin(np.deg2rad(angle)))
+                
+                angle += angle_step
+                angle = angle % 360
+            a += 0.2
             
     def gambar_bunga_scale(self):
-        # Draw and scale the center circle first
-        circle_points = basic.draw_circle(self.radius_lingkaran, self.xc, self.yc, self.pattern)
-        
-        # Apply scaling transformation matrix
-        tm = tf.scale2D(scale_x, scale_y, self.xc, self.yc)  # Create the scale matrix once
-        scaled_circle_points = tf.transformPoints2D(circle_points, tm)
-        
-        # Draw the scaled circle
-        for x, y in scaled_circle_points:
-            py5.point(x, y)
-
-        # Scale the ellipse (petals) points
-        Rx = self.radius_lingkaran * 2
-        Ry = self.radius_lingkaran
-        ellipse_points = basic.draw_patterned_ellipse(Rx, Ry, self.xc, self.yc, self.pattern)
-
-        # Apply the same scaling matrix to the ellipse points
-        scaled_ellipse_points = tf.transformPoints2D(ellipse_points, tm)
-
-        # Now position and rotate each scaled petal
-        anchor_radius = min(Rx, Ry) + self.radius_lingkaran  # Calculate anchor radius
-        angle_step = 360 / self.jumlah_kelopak
-        angle = angle_dinamis
-
-        for i in range(self.jumlah_kelopak):
-            # Rotate the scaled ellipse points around the center
-            rotated_ellipse = [tf.rotate2D(x, y, angle, self.xc, self.yc) for x, y in scaled_ellipse_points]
-            
-            # Draw the rotated and scaled petals
-            for x, y in rotated_ellipse:
-                # Anchor petals to the center of the circle using the angle
-                py5.point(x + anchor_radius * np.cos(np.deg2rad(angle)),
-                          y + anchor_radius * np.sin(np.deg2rad(angle)))
-
-            angle += angle_step  # Move to the next petal position
-            angle = angle % 360  # Keep the angle within [0, 360] degrees
+        py5.stroke(*self.color)
+        a=0
+        while a <= 2:
                 
+            # Draw and scale the center circle first
+            circle_points = basic.draw_circle(self.radius_lingkaran+a, self.xc, self.yc, self.pattern)
+            
+            # Apply scaling transformation matrix
+            tm = tf.scale2D(scale_x, scale_y, self.xc, self.yc)  # Create the scale matrix once
+            scaled_circle_points = tf.transformPoints2D(circle_points, tm)
+            
+            # Draw the scaled circle
+            for x, y in scaled_circle_points:
+                py5.point(x, y)
+
+            # Scale the ellipse (petals) points
+            Rx = self.radius_lingkaran * 2+a
+            Ry = self.radius_lingkaran+a
+            ellipse_points = basic.draw_patterned_ellipse(Rx, Ry, self.xc, self.yc, self.pattern)
+
+            # Apply the same scaling matrix to the ellipse points
+            scaled_ellipse_points = tf.transformPoints2D(ellipse_points, tm)
+
+            # Now position and rotate each scaled petal
+            anchor_radius = min(Rx, Ry) + self.radius_lingkaran+a  # Calculate anchor radius
+            angle_step = 360 / self.jumlah_kelopak
+            angle = angle_dinamis
+
+            for i in range(self.jumlah_kelopak):
+                # Rotate the scaled ellipse points around the center
+                rotated_ellipse = [tf.rotate2D(x, y, angle, self.xc, self.yc) for x, y in scaled_ellipse_points]
+                
+                # Draw the rotated and scaled petals
+                for x, y in rotated_ellipse:
+                    # Anchor petals to the center of the circle using the angle
+                    py5.point(x + anchor_radius * np.cos(np.deg2rad(angle)),
+                              y + anchor_radius * np.sin(np.deg2rad(angle)))
+
+                angle += angle_step  # Move to the next petal position
+                angle = angle % 360  # Keep the angle within [0, 360] degrees
+                
+            a += 0.2
 
 
 

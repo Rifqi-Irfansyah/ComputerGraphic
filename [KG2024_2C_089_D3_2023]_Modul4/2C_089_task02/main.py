@@ -74,14 +74,14 @@ def draw():
     bunga1 = Bunga(xc, yc, 30, 4, config.GREEN, "solid")
     bunga1.gambar_bunga("skala")
     
-    bunga1 = Bunga(-xc, yc, 30, 5, config.PURPLE, "dash_dash")
-    bunga1.gambar_bunga("skala")
+    bunga2 = Bunga(-xc, yc, 30, 5, config.PURPLE, "dash_dash")
+    bunga2.gambar_bunga("skala")
     
-    bunga1 = Bunga(xc, -yc, 30, 7, config.MAGENTA, "dot")
-    bunga1.gambar_bunga("skala")
+    bunga3 = Bunga(xc, -yc, 30, 7, config.MAGENTA, "dot")
+    bunga3.gambar_bunga("skala")
     
-    bunga1 = Bunga(-xc, -yc, 30, 8, config.BLUE, "dash_dot")
-    bunga1.gambar_bunga("skala")
+    bunga4 = Bunga(-xc, -yc, 30, 8, config.BLUE, "dash_dot")
+    bunga4.gambar_bunga("skala")
 
 
 py5.run_sketch()

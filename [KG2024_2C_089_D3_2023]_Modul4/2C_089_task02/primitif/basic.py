@@ -67,124 +67,98 @@ def kali(xa, ya, panjang, c=[255,0,0,255]):
 
 
 #LINGAKRAN
-def draw_circle(x, y, radius, style=None):
-    py5.stroke_weight(2)
-
-    if style == 'solid':
-        solid_circle(x, y, radius)
-    elif style == 'dotted':
-        dotted_circle(x, y, radius)
-    elif style == 'dotted_striped':
-        dotted_striped_circle(x, y, radius)
-    elif style == 'dashed':
-        dashed_circle(x, y, radius)
+def draw_circle(radius, center_x, center_y, pattern='solid'):
+    circle_pts = circle_points(radius, center_x, center_y)
+    pattern_points = []
+    
+    def draw_dots():
+        dot_space = 1.5
+        for i, (px, py) in enumerate(circle_pts):
+            if i % dot_space == 0:
+                pattern_points.append((px, py))
+    
+    def draw_dash_dot():
+        dash_length = 30
+        gap_length = 20
+        pattern_length = dash_length + gap_length
+        for i, (px, py) in enumerate(circle_pts):
+            if (i // (dash_length + gap_length)) % 2 == 0:
+                pattern_points.append((px, py))
+    
+    def draw_dash_dash():
+        dash_length = 30
+        gap_length = 20
+        pattern_length = dash_length + gap_length
+        for i, (px, py) in enumerate(circle_pts):
+            if (i // pattern_length) % 2 == 0:
+                if (i % pattern_length) < dash_length:
+                    pattern_points.append((px, py))
+    
+    def draw_solid():
+        for px, py in circle_pts:
+            pattern_points.append((px, py))
+    
+    # Draw the circle with the selected pattern
+    if pattern == 'dot':
+        draw_dots()
+    elif pattern == 'dash_dot':
+        draw_dash_dot()
+    elif pattern == 'dash_dash':
+        draw_dash_dash()
+    elif pattern == 'solid':
+        draw_solid()
     else:
-        print("Maaf, style tidak ada")
+        print("Pattern not recognized")
+    return (pattern_points)
+        
+def circle_points(radius, center_x, center_y):
+    points = []
+    x = radius
+    y = 0
+    p = 1 - radius  # Initial decision parameter
 
-
-def circlePlotPoints(xc, yc, x, y):
-    res = [
-        [xc + x, yc + y],
-        [xc - x, yc + y],
-        [xc + x, yc - y],
-        [xc - x, yc - y],
-        [xc + y, yc + x],
-        [xc - y, yc + x],
-        [xc + y, yc - x],
-        [xc - y, yc - x],
-        ]
-    return np.array(res)
-
-def solid_circle(xc, yc, radius):
-    x = 0
-    y = radius
-    p = 1 - radius
-    py5.points(circlePlotPoints(xc, yc, x, y))
-    
-    while(x < y):
-        x+=1
-        if (p < 0):
-            p+= 2*x + 1
+    # Circle points in the first octant
+    while x >= y:
+        points.extend([
+            (center_x + x, center_y + y),
+            (center_x - x, center_y + y),
+            (center_x + x, center_y - y),
+            (center_x - x, center_y - y),
+            (center_x + y, center_y + x),
+            (center_x - y, center_y + x),
+            (center_x + y, center_y - x),
+            (center_x - y, center_y - x)
+        ])
+        y += 1
+        if p > 0:
+            x -= 1
+            p += 2 * (y - x) + 1
         else:
-            y-=1
-            p+= 2*(x-y) + 1
-        py5.points(circlePlotPoints(xc, yc, x, y))
-        
-def dotted_circle(x, y, radius):
-    py5.no_fill()
-    circumference = py5.TWO_PI * radius
-    dot_spacing = 10
-    num_dots = int(circumference / dot_spacing)
+            p += 2 * y + 1
     
-    for i in range(num_dots):
-        angle = py5.TWO_PI * i / num_dots
-        dot_x = x + radius * py5.cos(angle)
-        dot_y = y + radius * py5.sin(angle)
-        py5.point(dot_x, dot_y)
-        
-def dotted_striped_circle(x,y,radius):
-    py5.no_fill()
-    circumference = py5.TWO_PI * radius
-    dot_spacing = 10
-    num_dots = int(circumference / dot_spacing)
-    
-    dash_length = 10
-    gap_length = 20
-    pattern_length = dash_length + gap_length
-    num_dashes = int(circumference / pattern_length)
-    angle_step = py5.TWO_PI / num_dashes
-    current_angle = 0
-    
-    for i in range(num_dots):
-        angle = py5.TWO_PI * i / num_dots
-        dot_x = x + radius * py5.cos(angle)
-        dot_y = y + radius * py5.sin(angle)
-        py5.point(dot_x, dot_y)
-    
-    for i in range(num_dashes):
-        next_angle = current_angle + angle_step * (dash_length / pattern_length)
-        x1 = x + radius * py5.cos(current_angle)
-        y1 = y + radius * py5.sin(current_angle)
-        x2 = x + radius * py5.cos(next_angle)
-        y2 = y + radius * py5.sin(next_angle)
-        py5.line(x1, y1, x2, y2)
-        current_angle = next_angle + (gap_length / pattern_length) * angle_step
+    return points
 
 
-def dashed_circle(x, y, radius):
-    py5.no_fill()
-    circumference = py5.TWO_PI * radius
-    dash_length = 5
-    gap_length = 10
-    pattern_length = dash_length + gap_length
-
-    num_dashes = int(circumference / pattern_length)
-    angle_step = py5.TWO_PI / num_dashes
-
-    current_angle = 0
-    for i in range(num_dashes):
-        next_angle = current_angle + angle_step * (dash_length / pattern_length)
-        x1 = x + radius * py5.cos(current_angle)
-        y1 = y + radius * py5.sin(current_angle)
-        x2 = x + radius * py5.cos(next_angle)
-        y2 = y + radius * py5.sin(next_angle)
-        py5.line(x1, y1, x2, y2)
-        current_angle = next_angle + (gap_length / pattern_length) * angle_step
         
 #ELLIPS
-def draw_ellipse(x, y, Rx, Ry, style=None):
-    py5.stroke_weight(2)
+    
+def rotate2D(a, refx, refy):
+    m = np.identity(3)
+    tm = np.identity(3)
+    a = np.radians(a)
+    m[0][0] = math.cos(a)
+    m[0][1] = -math.sin(a)
+    m[0][2] = refx * (1 - math.cos(a)) + refy * math.sin(a)
+    m[1][0] = math.sin(a)
+    m[1][1] = math.cos(a)
+    m[1][2] = refy * (1 - math.cos(a)) - refx * math.sin(a)
+    return np.dot(m, tm)
+    
+    
+    new_x = x * np.cos(angle) - y * np.sin(angle)
+    new_y = x * np.sin(angle) + y * np.cos(angle)
+    return new_x, new_y
 
-    if style == 'solid':
-        solid_ellipse(x, y, Rx, Ry)
-    elif style == 'dotted':
-        dotted_ellipse(x, y, Rx, Ry)
-    elif style == 'dotted_striped':
-        dotted_striped_ellipse(x, y, Rx, Ry)
-    elif style == 'dashed':
-        dashed_ellipse(x, y, Rx, Ry)
-    else:
-        print("Maaf, style tidak ada")
 
 
 def ellipsePlotPoints(xc, yc, x, y):
@@ -196,30 +170,60 @@ def ellipsePlotPoints(xc, yc, x, y):
     ]
     return np.array(res)
 
-
-def solid_ellipse(xc, yc, Rx, Ry):
+def bresenham_ellipse(rx, ry, xc, yc):
+    ellipse_points = []
+    
     x = 0
-    y = Ry
-    Rx2 = Rx * Rx
-    Ry2 = Ry * Ry
+    y = ry
+    rx2 = rx * rx
+    ry2 = ry * ry
+    tworx2 = 2 * rx2
+    twory2 = 2 * ry2
     px = 0
-    py = 2 * Rx2 * y
-
-    p1 = Ry2 - (Rx2 * Ry) + (0.25 * Rx2)
+    py = tworx2 * y
+    
+    # Region 1
+    p = ry2 - (rx2 * ry) + (0.25 * rx2)
+    
     while px < py:
-        py5.points(ellipsePlotPoints(xc, yc, x, y))
+        ellipse_points.append((x + xc, y + yc))
+        ellipse_points.append((-x + xc, y + yc))
+        ellipse_points.append((x + xc, -y + yc))
+        ellipse_points.append((-x + xc, -y + yc))
+        
         x += 1
-        px += 2 * Ry2
-        if p1 < 0:
-            p1 += Ry2 + px
+        px += twory2
+        if p < 0:
+            p += ry2 + px
         else:
             y -= 1
-            py -= 2 * Rx2
-            p1 += Ry2 + px - py
+            py -= tworx2
+            p += ry2 + px - py
+    
+    # Region 2
+    p = ry2 * (x + 0.5) * (x + 0.5) + rx2 * (y - 1) * (y - 1) - rx2 * ry2
+    
+    while y >= 0:
+        ellipse_points.append((x + xc, y + yc))
+        ellipse_points.append((-x + xc, y + yc))
+        ellipse_points.append((x + xc, -y + yc))
+        ellipse_points.append((-x + xc, -y + yc))
+        
+        y -= 1
+        py -= tworx2
+        if p > 0:
+            p += rx2 - py
+        else:
+            x += 1
+            px += twory2
+            p += rx2 - py + px
+    
+    return ellipse_points
 
     p2 = Ry2 * (x + 0.5) ** 2 + Rx2 * (y - 1) ** 2 - Rx2 * Ry2
     while y >= 0:
-        py5.points(ellipsePlotPoints(xc, yc, x, y))
+        # Get rotated ellipse points
+        points.extend(ellipse_plot_points(xc, yc, x, y, angle))
         y -= 1
         py -= 2 * Rx2
         if p2 > 0:
@@ -229,67 +233,52 @@ def solid_ellipse(xc, yc, Rx, Ry):
             px += 2 * Ry2
             p2 += Rx2 - py + px
 
-
-def dotted_ellipse(x, y, Rx, Ry):
-    py5.no_fill()
-    circumference = py5.TWO_PI * ((Rx + Ry) / 2)  # Approximate circumference
-    dot_spacing = 10
-    num_dots = int(circumference / dot_spacing)
-
-    for i in range(num_dots):
-        angle = py5.TWO_PI * i / num_dots
-        dot_x = x + Rx * py5.cos(angle)
-        dot_y = y + Ry * py5.sin(angle)
-        py5.point(dot_x, dot_y)
+    return np.array(points)
 
 
-def dotted_striped_ellipse(x, y, Rx, Ry):
-    py5.no_fill()
-    circumference = py5.TWO_PI * ((Rx + Ry) / 2)  # Approximate circumference
-    dot_spacing = 10
-    num_dots = int(circumference / dot_spacing)
+def draw_patterned_ellipse(rx, ry, xc, yc, pattern='solid'):
+    ellipse_points = bresenham_ellipse(rx, ry, xc, yc)
+    pattern_points = []
+    
+    def draw_dots():
+        dot_space = 1.5
+        for i, (px, py) in enumerate(ellipse_points):
+            if i % dot_space == 0:
+                pattern_points.append((px, py))
 
-    dash_length = 10
-    gap_length = 20
-    pattern_length = dash_length + gap_length
-    num_dashes = int(circumference / pattern_length)
-    angle_step = py5.TWO_PI / num_dashes
-    current_angle = 0
-
-    for i in range(num_dots):
-        angle = py5.TWO_PI * i / num_dots
-        dot_x = x + Rx * py5.cos(angle)
-        dot_y = y + Ry * py5.sin(angle)
-        py5.point(dot_x, dot_y)
-
-    for i in range(num_dashes):
-        next_angle = current_angle + angle_step * (dash_length / pattern_length)
-        x1 = x + Rx * py5.cos(current_angle)
-        y1 = y + Ry * py5.sin(current_angle)
-        x2 = x + Rx * py5.cos(next_angle)
-        y2 = y + Ry * py5.sin(next_angle)
-        py5.line(x1, y1, x2, y2)
-        current_angle = next_angle + (gap_length / pattern_length) * angle_step
-
-
-def dashed_ellipse(x, y, Rx, Ry):
-    py5.no_fill()
-    circumference = py5.TWO_PI * ((Rx + Ry) / 2)  # Approximate circumference
-    dash_length = 5
-    gap_length = 10
-    pattern_length = dash_length + gap_length
-
-    num_dashes = int(circumference / pattern_length)
-    angle_step = py5.TWO_PI / num_dashes
-
-    current_angle = 0
-    for i in range(num_dashes):
-        next_angle = current_angle + angle_step * (dash_length / pattern_length)
-        x1 = x + Rx * py5.cos(current_angle)
-        y1 = y + Ry * py5.sin(current_angle)
-        x2 = x + Rx * py5.cos(next_angle)
-        y2 = y + Ry * py5.sin(next_angle)
-        py5.line(x1, y1, x2, y2)
-        current_angle = next_angle + (gap_length / pattern_length) * angle_step
-
+    
+    def draw_dash_dot():
+        dash_length = 30
+        gap_length = 20
+        pattern_length = dash_length + gap_length
+        for i, (px, py) in enumerate(ellipse_points):
+            if (i // (dash_length + gap_length)) % 2 == 0:
+                pattern_points.append((px, py))
+    
+    def draw_dash_dash():
+        dash_length = 30
+        gap_length = 20
+        pattern_length = dash_length + gap_length
+        for i, (px, py) in enumerate(ellipse_points):
+            if (i // pattern_length) % 2 == 0:
+                if (i % pattern_length) < dash_length:
+                    pattern_points.append((px, py))
+    
+    def draw_solid():
+        for px, py in ellipse_points:
+            pattern_points.append((px, py))
+    
+    # Draw the ellipse with the selected pattern
+    if pattern == 'dot':
+        draw_dots()
+    elif pattern == 'dash_dot':
+        draw_dash_dot()
+    elif pattern == 'dash_dash':
+        draw_dash_dash()
+    elif pattern == 'solid':
+        draw_solid()
+    else:
+        print("Pattern not recognized")
+        
+    return (pattern_points)
 

@@ -94,6 +94,43 @@ class Gunungan:
         py5.points(line.line_bresenham(self.xc + 204 - 200, self.yc - 155, self.xc + 4, self.yc - 200))
         py5.points(line.line_bresenham(self.xc + 196 - 200, self.yc - 155, self.xc - 4, self.yc - 200))
         buat_lingkaran(self.xc ,self.yc-200 + 0, 4, 0, 180)
+        self.gambar_motif()
+
+    def gambar_motif(self):
+        py5.points(line.line_bresenham(self.xc, self.yc-4, self.xc, self.yc - 155))
+        buat_lingkaran(self.xc - 20,self.yc-110 , 20, 180, 315)         #KIRI
+        buat_lingkaran(self.xc - 26,self.yc-102 , 10, 270, 360)               
+        buat_lingkaran(self.xc - 26,self.yc-102 , 10, 0, 120)               
+        buat_lingkaran(self.xc - 22,self.yc-106 , 5, 90, 270)               
+        buat_lingkaran(self.xc - 20,self.yc-115 , 5, 70, 230)                       
+        buat_lingkaran(self.xc + 20,self.yc-110 , 20, 225, 360)         #KANAN
+        buat_lingkaran(self.xc + 26,self.yc-102 , 10, 30, 210)
+        buat_lingkaran(self.xc + 22,self.yc-106 , 5, 270, 360)                       
+        buat_lingkaran(self.xc + 22,self.yc-106 , 5, 0, 40)                       
+        buat_lingkaran(self.xc + 20,self.yc-115 , 5, 0, 110)                       
+        buat_lingkaran(self.xc + 20,self.yc-115 , 5, 270, 360)          
+
+        buat_lingkaran(self.xc - 11,self.yc-60, 10, 180, 315)           #KIRI
+        buat_lingkaran(self.xc - 13,self.yc-58, 7, 270, 360)               
+        buat_lingkaran(self.xc - 13,self.yc-58, 7, 0, 120)               
+        buat_lingkaran(self.xc - 10,self.yc-61, 3, 90, 270)
+        buat_lingkaran(self.xc + 11,self.yc-60, 10, 225, 360)           #KANAN
+        buat_lingkaran(self.xc + 13,self.yc-58, 7, 30, 210)               
+        buat_lingkaran(self.xc + 10,self.yc-61, 3, 0, 90)               
+        buat_lingkaran(self.xc + 10,self.yc-61, 3, 270, 360)
+
+        buat_lingkaran(self.xc - 10,self.yc-42, 7, 0, 55)              #KIRI
+        buat_lingkaran(self.xc - 10,self.yc-42, 7, 210, 360)
+        buat_lingkaran(self.xc - 7,self.yc-40, 3, 0, 160)
+        buat_lingkaran(self.xc + 10,self.yc-42, 7, 90, 330)            #KANAN
+        buat_lingkaran(self.xc + 7,self.yc-40, 3, 330, 360)
+        buat_lingkaran(self.xc + 7,self.yc-40, 3, 0, 120)
+
+        buat_lingkaran(self.xc - 5,self.yc-27, 5, 180, 360)            #KIRI
+        buat_lingkaran(self.xc - 6,self.yc-27, 3, 0, 200)
+        buat_lingkaran(self.xc + 5,self.yc-27, 5, 180, 360)            #KANAN
+        buat_lingkaran(self.xc + 6,self.yc-27, 3, 0, 180)
+        buat_lingkaran(self.xc + 6,self.yc-27, 3, 330, 360)
 
 
 def buat_lingkaran(xc, yc, radius, start, end):

@@ -62,7 +62,12 @@ class Ironman:
         buat_ellipse(self.xc + 65,self.yc + 4, 24, 25, 90, 110)         #TELINGA KANAN BAWAH
         buat_ellipse(self.xc + 65,self.yc + 4, 24, 25, 231, 253)        #ATAS
         buat_ellipse(self.xc + 75,self.yc + 10, 8, 19, 145, 236)        #TENGAH 
-        buat_ellipse(self.xc + 75,self.yc, 8, 19, 80, 185)             
+        buat_ellipse(self.xc + 75,self.yc, 8, 19, 80, 185)
+        self.baju()
+        self.celana()             
+        self.sepatu()
+        self.tangan_kiri()
+        self.tangan_kanan()
     
     def baju(self):
         basic.trapesium_tanpa_alas(self.xc + 0,self.yc -83, 50, 75, 50)
@@ -72,14 +77,64 @@ class Ironman:
         buat_lingkaran(self.xc-35 ,self.yc-100, 20, 210, 255)
         buat_lingkaran(self.xc-35 ,self.yc-112, 20, 228, 258)
         buat_lingkaran(self.xc+35 ,self.yc-100, 20, 285, 320)
-        buat_lingkaran(self.xc+35 ,self.yc-112, 20, 278, 320)
+        buat_lingkaran(self.xc+35 ,self.yc-112, 20, 278, 320)   
         py5.points(line.line_bresenham(self.xc + 12 , self.yc - 97, self.xc + 12, self.yc - 110))
         py5.points(line.line_bresenham(self.xc - 12 , self.yc - 97, self.xc - 12, self.yc - 110))
         buat_lingkaran(self.xc ,self.yc-87, 20, 50, 126)
         buat_lingkaran(self.xc ,self.yc-107, 12, 20, 159)
     
-    
-        
+    def celana(self):
+        py5.points(line.line_bresenham(self.xc + 38 , self.yc - 110, self.xc + 36, self.yc - 150))
+        py5.points(line.line_bresenham(self.xc + 6 , self.yc - 130, self.xc + 8, self.yc - 150))
+        py5.points(line.line_bresenham(self.xc - 38 , self.yc - 110, self.xc - 36, self.yc - 150))
+        py5.points(line.line_bresenham(self.xc - 6 , self.yc - 130, self.xc - 8, self.yc - 150))
+        buat_lingkaran(self.xc ,self.yc-130, 5, 180, 360)
+        buat_lingkaran(self.xc-30, self.yc-162, 40, 230, 280)
+        buat_lingkaran(self.xc+30, self.yc-162, 40, 258, 308)
+        buat_lingkaran(self.xc-22, self.yc-140, 5, 0, 360)
+        buat_lingkaran(self.xc+22, self.yc-140, 5, 0, 360)
+
+    def sepatu(self):
+        buat_ellipse(self.xc-22 ,self.yc-153, 15, 6, 0, 190)  
+        buat_ellipse(self.xc-22 ,self.yc-153, 15, 6, 340, 360)  
+        buat_ellipse(self.xc-22 ,self.yc-148, 15, 6, 0, 180)  
+        buat_ellipse(self.xc+22 ,self.yc-153, 15, 6, 0, 190)  
+        buat_ellipse(self.xc+22 ,self.yc-153, 15, 6, 340, 360)
+        buat_ellipse(self.xc+22 ,self.yc-148, 15, 6, 0, 180)  
+
+    def tangan_kiri(self):
+        buat_lingkaran(self.xc-35 ,self.yc-63, 8, 110, 250)
+        buat_ellipse(self.xc-70 ,self.yc-63, 50, 9, 55, 157)  
+        buat_ellipse(self.xc-70 ,self.yc-61, 50, 9, 205, 305)  
+        buat_lingkaran(self.xc-85 ,self.yc-62, 10, 0, 90)
+        buat_lingkaran(self.xc-85 ,self.yc-62, 10, 270, 360)
+        buat_lingkaran(self.xc-77 ,self.yc-62, 10, 0, 90)
+        buat_lingkaran(self.xc-77 ,self.yc-62, 10, 270, 360)
+
+        buat_lingkaran(self.xc-40 ,self.yc-62, 15, 313, 360)
+        buat_lingkaran(self.xc-40 ,self.yc-62, 15, 313, 360)
+        buat_lingkaran(self.xc-30 ,self.yc-62, 15, 313, 360)
+        buat_lingkaran(self.xc-30 ,self.yc-62, 15, 313, 360)
+
+        buat_lingkaran(self.xc-40 ,self.yc-62, 15, 0, 38)
+        buat_lingkaran(self.xc-30 ,self.yc-62, 15, 0, 38)
+
+    def tangan_kanan(self):
+        buat_lingkaran(self.xc+35 ,self.yc-63, 8, 110, 250)
+        buat_ellipse(self.xc+70 ,self.yc-63, 50, 9, 55, 157)  
+        buat_ellipse(self.xc+70 ,self.yc-61, 50, 9, 205, 305)  
+        buat_lingkaran(self.xc+85 ,self.yc-62, 10, 0, 90)
+        buat_lingkaran(self.xc+85 ,self.yc-62, 10, 270, 360)
+        buat_lingkaran(self.xc+77 ,self.yc-62, 10, 0, 90)
+        buat_lingkaran(self.xc+77 ,self.yc-62, 10, 270, 360)
+
+        buat_lingkaran(self.xc+40 ,self.yc-62, 15, 313, 360)
+        buat_lingkaran(self.xc+40 ,self.yc-62, 15, 313, 360)
+        buat_lingkaran(self.xc+30 ,self.yc-62, 15, 313, 360)
+        buat_lingkaran(self.xc+30 ,self.yc-62, 15, 313, 360)
+
+        buat_lingkaran(self.xc+40 ,self.yc-62, 15, 0, 38)
+        buat_lingkaran(self.xc+30 ,self.yc-62, 15, 0, 38)
 
 def updatey():
     global y
@@ -238,12 +293,11 @@ def draw():
     
     obj_ironman = Ironman(gerak,gerak)
     obj_ironman.gambar_kepala()
-    obj_ironman.baju()
     
-    # obj_gunungan = Gunungan(-config.WIDTH/4,-50)
-    # obj_gunungan.gambar_gunungan()
+    obj_gunungan = Gunungan(-config.WIDTH/4,-50)
+    obj_gunungan.gambar_gunungan()
 
-    # obj_gunungan = Gunungan(config.WIDTH/4,-50)
-    # obj_gunungan.gambar_gunungan()
+    obj_gunungan = Gunungan(config.WIDTH/4,-50)
+    obj_gunungan.gambar_gunungan()
 
 py5.run_sketch()

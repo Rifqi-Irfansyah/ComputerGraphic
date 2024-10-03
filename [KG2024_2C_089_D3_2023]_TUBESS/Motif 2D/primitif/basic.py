@@ -15,8 +15,8 @@ def draw_margin(width, height, margin, c=[0,0,0,255]):
 
 def draw_grid(width, height, margin, c=[0,0,0,255]):
     # Sumbu Y
-    xa = margin;
-    ya = 2*margin;
+    xa = margin
+    ya = 2*margin
     xb = width - xa
     yb = height - ya
     y_range = (height / margin)
@@ -50,7 +50,10 @@ def persegi(xa, ya, panjang, c=[0,0,0,255]):
 
 def persegi_panjang(xa, ya, panjang, lebar, c=[0,0,0,255]):
     py5.stroke(c[0], c[1], c[2], c[3])
-    pass
+    py5.points(primitif.line.line_bresenham(xa-panjang/2, ya-lebar/2, xa+panjang/2, ya-lebar/2))
+    py5.points(primitif.line.line_bresenham(xa-panjang/2, ya+lebar/2, xa+panjang/2, ya+lebar/2))
+    py5.points(primitif.line.line_bresenham(xa-panjang/2, ya-lebar/2, xa-panjang/2, ya+lebar/2))
+    py5.points(primitif.line.line_bresenham(xa+panjang/2, ya+lebar/2, xa+panjang/2, ya-lebar/2))
 
 def segitiga_siku(xa, ya, alas, tinggi, c=[255,0,0,255]):
     py5.stroke(c[0], c[1], c[2], c[3])

@@ -6,12 +6,13 @@ import math
 def round(x):
     return int(x+0.5)
 
-def draw_margin(width, height, margin, c=[0,0,0,255]):
-    py5.stroke(c[0], c[1], c[2], c[3])
-    py5.points(primitif.line.line_dda(margin,margin,width-margin,margin))
-    py5.points(primitif.line.line_dda(margin,height-margin,width-margin,height-margin))
-    py5.points(primitif.line.line_bresenham(margin,margin,margin,height-margin))
-    py5.points(primitif.line.line_bresenham(width-margin,margin,width-margin,height-margin))
+def draw_margin(width, height, margin):
+    points=[]
+    points.extend(primitif.line.line_dda(margin,margin,width-margin,margin))
+    points.extend(primitif.line.line_dda(margin,height-margin,width-margin,height-margin))
+    points.extend(primitif.line.line_bresenham(margin,margin,margin,height-margin))
+    points.extend(primitif.line.line_bresenham(width-margin,margin,width-margin,height-margin))
+    return points
 
 def draw_grid(width, height, margin, c=[0,0,0,255]):
     # Sumbu Y
@@ -48,21 +49,23 @@ def persegi(xa, ya, panjang, c=[0,0,0,255]):
     py5.points(primitif.line.line_bresenham(xa,ya,xa,ya+panjang))
     py5.points(primitif.line.line_bresenham(xa+panjang,ya, xa+panjang,ya+panjang))
 
-def persegi_panjang(xa, ya, panjang, lebar, c=[0,0,0,255]):
-    py5.stroke(c[0], c[1], c[2], c[3])
-    py5.points(primitif.line.line_bresenham(xa-panjang/2, ya-lebar/2, xa+panjang/2, ya-lebar/2))
-    py5.points(primitif.line.line_bresenham(xa-panjang/2, ya+lebar/2, xa+panjang/2, ya+lebar/2))
-    py5.points(primitif.line.line_bresenham(xa-panjang/2, ya-lebar/2, xa-panjang/2, ya+lebar/2))
-    py5.points(primitif.line.line_bresenham(xa+panjang/2, ya+lebar/2, xa+panjang/2, ya-lebar/2))
+def persegi_panjang(xa, ya, panjang, lebar):
+    points=[]
+    points.extend(primitif.line.line_bresenham(xa-panjang/2, ya-lebar/2, xa+panjang/2, ya-lebar/2))
+    points.extend(primitif.line.line_bresenham(xa-panjang/2, ya+lebar/2, xa+panjang/2, ya+lebar/2))
+    points.extend(primitif.line.line_bresenham(xa-panjang/2, ya-lebar/2, xa-panjang/2, ya+lebar/2))
+    points.extend(primitif.line.line_bresenham(xa+panjang/2, ya+lebar/2, xa+panjang/2, ya-lebar/2))
+    return points
 
 def segitiga_siku(xa, ya, alas, tinggi, c=[255,0,0,255]):
     py5.stroke(c[0], c[1], c[2], c[3])
     pass
 
-def segitiga_tanpa_alas(xa, ya, alas, tinggi, c=[0,0,0,255]):
-    py5.stroke(c[0], c[1], c[2], c[3])
-    py5.points(primitif.line.line_bresenham(xa-alas/2, ya-tinggi/2, xa, ya+tinggi/2))
-    py5.points(primitif.line.line_bresenham(xa+alas/2, ya-tinggi/2, xa, ya+tinggi/2))
+def segitiga_tanpa_alas(xa, ya, alas, tinggi):
+    points=[]
+    points.extend(primitif.line.line_bresenham(xa-alas/2, ya-tinggi/2, xa, ya+tinggi/2))
+    points.extend(primitif.line.line_bresenham(xa+alas/2, ya-tinggi/2, xa, ya+tinggi/2))
+    return points
 
 
 def trapesium_siku(xa, ya, aa, ab, tinggi, c=[0,0,0,255]):
@@ -72,12 +75,13 @@ def trapesium_siku(xa, ya, aa, ab, tinggi, c=[0,0,0,255]):
     py5.points(primitif.line.line_bresenham(xa + ab, ya + tinggi, xa, ya + tinggi))
     py5.points(primitif.line.line_bresenham(xa, ya + tinggi, xa, ya))
 
-def trapesium_tanpa_alas(xa, ya, atas, bawah, tinggi, c=[0,0,0,255]):
-    py5.stroke(c[0], c[1], c[2], c[3])
-    py5.points(primitif.line.line_bresenham(xa-bawah/2, ya-tinggi/2, xa-atas/2, ya+tinggi/2)) #kiri
-    py5.points(primitif.line.line_bresenham(xa-atas/2, ya+tinggi/2, xa+atas/2, ya+tinggi/2)) #atas
-    py5.points(primitif.line.line_bresenham(xa+bawah/2, ya-tinggi/2, xa+atas/2, ya+tinggi/2)) #kanan
-    
+def trapesium_tanpa_alas(xa, ya, atas, bawah, tinggi):
+    points=[]
+    points.extend(primitif.line.line_bresenham(xa-bawah/2, ya-tinggi/2, xa-atas/2, ya+tinggi/2)) #kiri
+    points.extend(primitif.line.line_bresenham(xa-atas/2, ya+tinggi/2, xa+atas/2, ya+tinggi/2)) #atas
+    points.extend(primitif.line.line_bresenham(xa+bawah/2, ya-tinggi/2, xa+atas/2, ya+tinggi/2)) #kanan
+    return points
+
 def kali(xa, ya, panjang, c=[255,0,0,255]):
     py5.stroke(c[0], c[1], c[2], c[3])
     py5.points(primitif.line.line_bresenham(xa,ya,xa+panjang,ya+panjang))

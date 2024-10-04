@@ -79,8 +79,6 @@ class Bunga:
             for x, y in translasi:
                 py5.point(x  , y )
 
-
-
             Rx = self.radius_lingkaran * 2 +a 
             Ry = self.radius_lingkaran  +a
             

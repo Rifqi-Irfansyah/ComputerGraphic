@@ -10,11 +10,6 @@ def translate2D(tx, ty, tm=np.zeros(3)):
     if (tm == 0).all():
         return m
     return np.matmul(m, tm)
-# def translate2D(tx, ty, tm=np.zeros(3)):
-#     m = np.identity(3)
-#     m[0][2] = tx
-#     m[1][2] = ty
-#     return np.dot(m, tm)
 
 def scale2D(sx, sy, refx, refy, tm=np.identity(3)):
     m = np.identity(3)
@@ -43,13 +38,6 @@ def rotate2D(x, y, a, refx, refy):
     
     return x_new, y_new
 
-# def transformPoints2D(pts, tm = np.identity(3)):
-# #     i, _ = pts.shape
-#     for k in range(pts):
-#         tmp = tm[0][0] * pts[k, 0] + tm[0][1] * pts[k, 1] + tm[0][2]
-#         pts[k, 1] = tm[1][0] * pts[k, 0] + tm[1][1] * pts[k, 1] + tm[1][2]
-#         pts[k, 0] = tmp
-#     return pts
 
 def transformPoints2D(pts, tm=np.identity(3)):
     transformed_pts = []
@@ -68,38 +56,19 @@ def transformPoints2D(pts, tm=np.identity(3)):
     
     return transformed_pts
 
-# def translate2D(tx, ty, tm):
-#     m = np.identity(3)
-#     m[0][2] = tx
-#     m[1][2]=ty
-#     return np.dot(m, tm)
-# 
-# def scale2D(sx, sy, refx, refy, tm):
-#     m = np.identity(3)
-#     m[0][0] = sx
-#     m[0][2] = (1-sx)*refx
-#     m[1][1] = sy 
-#     m[1][2] = (1-sy)*refy
-#     return np.dot(m, tm)
-# 
-# def rotate2D(a, refx, refy):
-#     m = np.identity(3)
-#     tm = np.identity(3)
-#     a = math.radians(a)
-#     m[0][0] = round(math.cos(a))
-#     m[0][1] = round(- math.sin(a))
-#     m[0][2] = refx * (1 - round(math.cos(a))) + refy * round(math.sin(a))
-#     m[1][0] = round(math.sin(a))
-#     m[1][1] = round(math.cos(a))
-#     m[1][2] = refy * (1 -round(math.cos(a))) - refx * round(math.sin(a))
-#     return np.dot(m, tm)
-# 
-# def transformPoints2D(pts, tm):
-#     i, _  = pts.shape
-#     
-#     for k in range(i):
-#         tmp = tm[0][0] * pts[k,0] + tm[0][1] * pts[k,1] + tm[0][2]
-#         pts[k,1] = tm[1][0] * pts[k,0] + tm[1][1] * pts[k,1] + tm[1][2]
-#         pts[k,0] = tmp
-# 
-#     return pts
+def reflection2D(axis, tm=np.identity(3)):
+    m = np.identity(3)
+    
+    if axis == 'x':  # Reflection across the x-axis
+        m[1][1] = -1
+    elif axis == 'y':  # Reflection across the y-axis
+        m[0][0] = -1
+    elif axis == 'y=x':  # Reflection across the line y=x
+        m[0][0] = 0
+        m[0][1] = 1
+        m[1][0] = 1
+        m[1][1] = 0
+    else:
+        raise ValueError("Unsupported reflection axis. Choose 'x', 'y', or 'y=x'.")
+    
+    return np.dot(m, tm)

@@ -25,7 +25,6 @@ def line_dda(xa, ya, xb, yb):
     
     return np.array(res)
 
-
 def line_bresenham(xa,ya,xb,yb):
     if(abs(yb-ya) < abs(xb-xa)):
         if(xa > xb):

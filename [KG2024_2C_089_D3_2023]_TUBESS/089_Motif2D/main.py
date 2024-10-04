@@ -24,15 +24,14 @@ class Ironman:
         points.extend(self.celana())             
         points.extend(self.sepatu())
         points.extend(self.tangan_kiri())
-        cetak_point(points)
+        cetak_point(points, config.RED)
         pointsa=[]
         pointsa.extend(self.tangan_kiri())
         rotate(pointsa, self.xc+0, self.yc-63, 180, 0)
-        cetak_point(pointsa)
+        cetak_point(pointsa, config.RED)
 
         
     def gambar_kepala(self):
-        updatey()
         points=[]
         # OUTER
         points.extend(buat_lingkaran(self.xc + 18.8,self.yc + 11.9, 91.5, 0, 27))        # PELIPIS KIRI
@@ -186,7 +185,7 @@ class Gunungan:
         points.extend(line.line_bresenham(self.xc + 196 - 200, self.yc - 155, self.xc - 4, self.yc - 200))
         points.extend(buat_lingkaran(self.xc ,self.yc-200 + 0, 4, 0, 180))
         points.extend(self.gambar_motif())
-        cetak_point(points)
+        cetak_point(points, config.BROWN)
 
     def gambar_motif(self):
         points=[]
@@ -275,7 +274,6 @@ class Pesawat:
         self.yc = yc
     
     def gambar_pesawat(self):
-        updatey()
         points=[]
         points.extend(buat_ellipse(self.xc,self.yc, 102, 18, 0, 176))             
         points.extend(buat_ellipse(self.xc,self.yc, 102, 18, 235, 285))             
@@ -335,7 +333,7 @@ class Bg:
         points.extend(buat_lingkaran(self.xc-15, self.yc+140, 14, 72, 228))
         points.extend(buat_lingkaran(self.xc-15, self.yc+140, 14, 290, 360))
         points.extend(self.gambar_gedung())
-        cetak_point(points)
+        cetak_point(points, config.PURPLE)
         
         pointsb = (self.gambar_gedung())
         tm_reflection_x = tf.reflection2D('y')
@@ -458,8 +456,6 @@ def draw():
     py5.translate(config.WIDTH /2, config.HEIGHT / 2)
     py5.scale(1, -1)
     
-    obj_ironman = Ironman(0,100)
-    obj_ironman.gambar_ironman()
     
     obj_gunungan = Gunungan(-config.WIDTH/4-100,+150)
     obj_gunungan.gambar_gunungan()
@@ -472,5 +468,8 @@ def draw():
 
     obj_bg = Bg(0, -config.HEIGHT/2+margin)
     obj_bg.gambar_bg()
+    
+    obj_ironman = Ironman(0,100)
+    obj_ironman.gambar_ironman()
 
 py5.run_sketch()

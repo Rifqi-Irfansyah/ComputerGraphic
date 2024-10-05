@@ -15,13 +15,16 @@ x = 1
 gerak = 1
 
 class Animasi:
-    def __init__(self, xc, yc):
-        self.xc = xc
-        self.yc = yc
+    points = []
+    def __init__(self, points):
+        self.points = points
 
-    def rotate(self, points, refx, refy, angle, anchor_radius):
+    def setPoints(self, points):
+        self.points = points
+    
+    def rotate(self, points, refx, refy, angle):
         rotated_ellipse = [tf.rotate2D(x, y, angle, refx, refy) for x, y in points]    
-        return rotated_ellipse
+        return rotated_ellipse 
     
     def translate(self, tx, ty, points):
         translated_points = []
@@ -35,25 +38,42 @@ class Animasi:
 
         return translated_points
 
+   
+
+    def scale(self, points, scale_factor):    
+        scaled_circle_points = [
+            tf.scale2D(scale_factor, scale_factor, 0, 0, (x, y)) 
+            for x, y in points
+        ]
+        return scaled_circle_points
 
 
-class Ironman:
+class Ironman(Animasi):
+    points = []
     def __init__(self, xc, yc):
         self.xc = xc
         self.yc = yc
 
-    def gambar_ironman(self):
-        points=[]
+    def anime_translate(self, x, y):
+        self.points = super().translate(x,y, self.points)
+        cetak_point(self.points, config.RED)
+
+    def gambar_ironman(self, rotate_tangan_kanan, rotate_tangan_kiri):
+        points = []
         points.extend(self.gambar_kepala())
         points.extend(self.baju())
         points.extend(self.celana())             
         points.extend(self.sepatu())
-        points.extend(self.tangan_kiri())
-        cetak_point(points, config.RED)
-        pointsa=[]
-        pointsa.extend(self.tangan_kiri())
-        rotate(pointsa, self.xc+0, self.yc-63, 180, 0)
-        cetak_point(pointsa, config.RED)
+        points_tanganKiri = self.tangan_kiri()
+        points_tanganKanan = super().rotate(points_tanganKiri, self.xc, self.yc-63, 180)
+
+        points_tanganKiri = super().rotate(points_tanganKiri, self.xc-35, self.yc-60, rotate_tangan_kanan)
+        points_tanganKanan = super().rotate(points_tanganKanan, self.xc+35, self.yc-60, -rotate_tangan_kiri)
+
+        points.extend(points_tanganKiri)
+        points.extend(points_tanganKanan)
+
+        self.points = points
 
         
     def gambar_kepala(self):
@@ -163,47 +183,8 @@ class Ironman:
         points.extend(buat_lingkaran(self.xc-30 ,self.yc-62, 15, 0, 38))
         return points
 
-    def tangan_kanan(self):
-        points=[]
-        points.extend(buat_lingkaran(self.xc+35 ,self.yc-63, 8, 110, 250))
-        points.extend(buat_ellipse(self.xc+70 ,self.yc-63, 50, 9, 55, 157))  
-        points.extend(buat_ellipse(self.xc+70 ,self.yc-61, 50, 9, 205, 305))  
-        points.extend(buat_lingkaran(self.xc+85 ,self.yc-62, 10, 0, 90))
-        points.extend(buat_lingkaran(self.xc+85 ,self.yc-62, 10, 270, 360))
-        points.extend(buat_lingkaran(self.xc+77 ,self.yc-62, 10, 0, 90))
-        points.extend(buat_lingkaran(self.xc+77 ,self.yc-62, 10, 270, 360))
-
-        points.extend(buat_lingkaran(self.xc+40 ,self.yc-62, 15, 313, 360))
-        points.extend(buat_lingkaran(self.xc+40 ,self.yc-62, 15, 313, 360))
-        points.extend(buat_lingkaran(self.xc+30 ,self.yc-62, 15, 313, 360))
-        points.extend(buat_lingkaran(self.xc+30 ,self.yc-62, 15, 313, 360))
-
-        points.extend(buat_lingkaran(self.xc+40 ,self.yc-62, 15, 0, 38))
-        points.extend(buat_lingkaran(self.xc+30 ,self.yc-62, 15, 0, 38))
-        return points
-
-def updateRotate():
-    global r,x
-
-    x += 1
-    if(x <= 60):
-        r += 1
-    elif(x <= 120):
-        r -= 1
-    else:
-        x = 1
-        r = 1
-
-def updatey():
-    global y
-    y += 1
-    if(y == 360):
-        y = 0
-
-
 class Gunungan(Animasi):
-    def __init__(self, xc, yc,):
-        super().__init__(xc, yc)
+    def __init__(self, xc, yc):
         self.xc = xc
         self.yc = yc
         self.points=[]
@@ -211,7 +192,7 @@ class Gunungan(Animasi):
     def anime_rotate(self, side):
         updateRotate()
         angle = r * side
-        resultpoints = super().rotate(self.points, self.xc,self.yc-200, angle, 0.2)
+        resultpoints = super().rotate(self.points, self.xc,self.yc-200, angle)
         py5.stroke_weight(1.5)
         cetak_point(resultpoints, config.BROWN)
     
@@ -315,14 +296,12 @@ class Gunungan(Animasi):
 
 class Pesawat(Animasi):
     def __init__(self, xc, yc,):
-        super().__init__(xc, yc)
         self.xc = xc
         self.yc = yc
         self.points=[]
 
     def anime_translate(self, x):
-        updatey()
-        resultpoints = super().translate(x*y,0, self.points)
+        resultpoints = super().translate(x,0, self.points)
         py5.stroke_weight(1.5)
         cetak_point(resultpoints)
     
@@ -349,6 +328,7 @@ class Pesawat(Animasi):
         points.extend(buat_ellipse(self.xc+124,self.yc+4, 25, 28, 0, 22))
         points.extend(buat_ellipse(self.xc+54,self.yc+15, 56, 19, 192, 213))
         self.points = points
+
 
 class Bg:
     def __init__(self, xc, yc,):
@@ -483,13 +463,7 @@ def buat_ellipse(xc, yc, Rx, Ry, start, end):
             break
     return selected_points
     
-def rotate(points, refx, refy, angle, anchor_radius):
-    rotated_ellipse = [tf.rotate2D(x, y, angle, refx, refy) for x, y in points]    
-    # DRAW
-    for x, y in rotated_ellipse:
-        py5.point(x + anchor_radius * np.cos(np.deg2rad(angle)) , y + anchor_radius * np.sin(np.deg2rad(angle)))
-    
-    return rotated_ellipse 
+
 
 def setup():
     py5.size(config.WIDTH, config.HEIGHT)
@@ -498,16 +472,54 @@ def gerakin():
     global gerak
     gerak += 1
 
-def draw():
-    global angle, xc, yc, y, gerak, r
+def updateRotate():
+    global r,x
+
+    x += 1
+    if(x <= 60):
+        r += 1
+    elif(x <= 120):
+        r -= 1
+    else:
+        x = 1
+        r = 1
+
+pesawat = 1
+def gerakan_pesawat():
+    global pesawat
+    pesawat += 1
+    if(pesawat >= 230):
+        pesawat = 1
+
+tangan = 1
+tangan2 = 1
+def gerakan_tangan():
+    global tangan, tangan2
+    tangan2 += 1.5
+    if tangan2 <=65:
+        tangan += 1.5
+    elif tangan2 <= 130:
+        tangan -= 1.5
+    else:
+        tangan2 = 1
+
+ironman = 1
+ironman2 = 1
+def gerakan_ironman():
+    global ironman, ironman2
+    ironman2 += 1
+    if ironman2 <= 43:
+        ironman += 1
+    elif ironman2 <= 86:
+        ironman -= 1
+    else:
+        ironman2 = 1 
+
+def draw():    
     py5.background(255)
-    points=[]
-    points.extend(basic.draw_margin(py5.width, py5.height, margin))
-    # basic.draw_kartesian(py5.width, py5.height, margin, c=[0,0,0,255])
-    cetak_point(points)
-    py5.points(points)
-    py5.fill(000)
-    py5.text(y, py5.width/3,py5.height/2)
+    cetak_point(basic.draw_margin(py5.width, py5.height, margin))
+
+    py5.text(pesawat, py5.width/3,py5.height/2)
     
     py5.translate(config.WIDTH /2, config.HEIGHT / 2)
     py5.scale(1, -1)
@@ -520,14 +532,18 @@ def draw():
     obj_gunungan.gambar_gunungan()
     obj_gunungan.anime_rotate(1)
 
-    obj_pesawat = Pesawat(config.WIDTH/4,config.HEIGHT/2.5)
+    gerakan_pesawat()
+    obj_pesawat = Pesawat(config.WIDTH/2+2*margin,config.HEIGHT/2.5)
     obj_pesawat.gambar_pesawat()
-    obj_pesawat.anime_translate(-5)
+    obj_pesawat.anime_translate(-5*pesawat)
 
     obj_bg = Bg(0, -config.HEIGHT/2+margin)
     obj_bg.gambar_bg()
-    
+
+    gerakan_ironman()    
+    gerakan_tangan()
     obj_ironman = Ironman(0,100)
-    obj_ironman.gambar_ironman()
+    obj_ironman.gambar_ironman(tangan, tangan)
+    obj_ironman.anime_translate(0, ironman)
 
 py5.run_sketch()

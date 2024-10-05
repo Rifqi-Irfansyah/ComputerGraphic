@@ -6,14 +6,6 @@ import primitif.basic as basic
 import primitif.line as line
 import config
 
-rx, ry = 50, 30
-angle_dinamis = 0
-margin = 20
-y=1
-r=1
-x = 1
-gerak = 1
-
 class Animasi:
     points = []
     def __init__(self, points):
@@ -55,8 +47,9 @@ class Ironman(Animasi):
         self.yc = yc
 
     def anime_translate(self, x, y):
-        self.points = super().translate(x,y, self.points)
-        cetak_point(self.points, config.RED)
+        resultpoints = super().translate(x,y, self.points)
+        py5.stroke_weight(2)
+        cetak_point(resultpoints, config.RED)
 
     def gambar_ironman(self, rotate_tangan_kanan, rotate_tangan_kiri):
         points = []
@@ -189,11 +182,9 @@ class Gunungan(Animasi):
         self.yc = yc
         self.points=[]
 
-    def anime_rotate(self, side):
-        updateRotate()
-        angle = r * side
+    def anime_rotate(self, angle):
         resultpoints = super().rotate(self.points, self.xc,self.yc-200, angle)
-        py5.stroke_weight(1.5)
+        py5.stroke_weight(2.5)
         cetak_point(resultpoints, config.BROWN)
     
     def gambar_gunungan(self):
@@ -462,27 +453,24 @@ def buat_ellipse(xc, yc, Rx, Ry, start, end):
             selected_points.append((x, y))
             break
     return selected_points
-    
-
 
 def setup():
     py5.size(config.WIDTH, config.HEIGHT)
 
-def gerakin():
-    global gerak
-    gerak += 1
 
-def updateRotate():
-    global r,x
-
+margin = 20
+x = 1
+rotate = 1
+def gerakan_gunungan():
+    global rotate,x
     x += 1
     if(x <= 60):
-        r += 1
+        rotate += 1
     elif(x <= 120):
-        r -= 1
+        rotate -= 1
     else:
         x = 1
-        r = 1
+        rotate = 1
 
 pesawat = 1
 def gerakan_pesawat():
@@ -517,30 +505,28 @@ def gerakan_ironman():
 
 def draw():    
     py5.background(255)
-    cetak_point(basic.draw_margin(py5.width, py5.height, margin))
-
-    py5.text(pesawat, py5.width/3,py5.height/2)
-    
+    cetak_point(basic.draw_margin(py5.width, py5.height, margin))    
     py5.translate(config.WIDTH /2, config.HEIGHT / 2)
     py5.scale(1, -1)
     
+    gerakan_gunungan()                                                              # OBJEK GUNUNGAN
     obj_gunungan = Gunungan(-config.WIDTH/4-180,+150)
     obj_gunungan.gambar_gunungan()
-    obj_gunungan.anime_rotate(-1)
+    obj_gunungan.anime_rotate(-rotate)
 
     obj_gunungan = Gunungan(config.WIDTH/4+180,+150)
     obj_gunungan.gambar_gunungan()
-    obj_gunungan.anime_rotate(1)
+    obj_gunungan.anime_rotate(rotate)
 
-    gerakan_pesawat()
+    gerakan_pesawat()                                                           # OBJEK PESAWAT
     obj_pesawat = Pesawat(config.WIDTH/2+2*margin,config.HEIGHT/2.5)
     obj_pesawat.gambar_pesawat()
     obj_pesawat.anime_translate(-5*pesawat)
 
-    obj_bg = Bg(0, -config.HEIGHT/2+margin)
+    obj_bg = Bg(0, -config.HEIGHT/2+margin)                                     # OBJEK BACKGROUND
     obj_bg.gambar_bg()
 
-    gerakan_ironman()    
+    gerakan_ironman()                                                           # OBJEK IRONMAN
     gerakan_tangan()
     obj_ironman = Ironman(0,100)
     obj_ironman.gambar_ironman(tangan, tangan)

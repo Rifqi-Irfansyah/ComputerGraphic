@@ -18,19 +18,6 @@ class Animasi:
         rotated_ellipse = [tf.rotate2D(x, y, angle, refx, refy) for x, y in points]    
         return rotated_ellipse 
     
-    def scale(self, sx, sy, refx, refy, points):
-        scaled_points = []
-
-        for x, y in points:
-            # Ubah titik menjadi bentuk homogen [x, y, 1]
-            transformed_point = tf.scale2D(sx, sy, refx,refy, np.array([[x], [y], [1]]))
-            x_scaled = transformed_point[0, 0]
-            y_scaled = transformed_point[1, 0]
-            
-            scaled_points.append((x_scaled, y_scaled))
-
-        return scaled_points
-    
     def translate(self, tx, ty, points):
         translated_points = []
 
@@ -43,19 +30,18 @@ class Animasi:
 
         return translated_points
 
+   
 
-    # def scale(self, points, scale_factor):    
-    #     scaled_circle_points = [
-    #         tf.scale2D(scale_factor, scale_factor, 0, 0, (x, y)) 
-    #         for x, y in points
-    #     ]
-    #     return scaled_circle_points
+    def scale(self, points, scale_factor):    
+        scaled_circle_points = [
+            tf.scale2D(scale_factor, scale_factor, 0, 0, (x, y)) 
+            for x, y in points
+        ]
+        return scaled_circle_points
 
 
-    
 class Ironman(Animasi):
     points = []
-    pointsApi = []
     def __init__(self, xc, yc):
         self.xc = xc
         self.yc = yc
@@ -64,9 +50,6 @@ class Ironman(Animasi):
         resultpoints = super().translate(x,y, self.points)
         py5.stroke_weight(2)
         cetak_point(resultpoints, config.RED)
-
-        self.pointsApi = super().scale(1,api, self.xc, self.yc-165, self.pointsApi)
-        cetak_point(super().translate(x,y, self.pointsApi), config.BLUE2)
 
     def gambar_ironman(self, rotate_tangan_kanan, rotate_tangan_kiri):
         points = []
@@ -84,11 +67,6 @@ class Ironman(Animasi):
         points.extend(points_tanganKanan)
 
         self.points = points
-        self.api()
-    
-    def api(self):
-        self.pointsApi.extend(buat_ellipse(self.xc-22 ,self.yc-153, 10, 30, 20, 153))  
-        self.pointsApi.extend(buat_ellipse(self.xc+22 ,self.yc-153, 10, 30, 20, 153))  
 
         
     def gambar_kepala(self):
@@ -515,10 +493,8 @@ def gerakan_tangan():
 
 ironman = 1
 ironman2 = 1
-api = 0
-
 def gerakan_ironman():
-    global ironman, ironman2, api
+    global ironman, ironman2
     ironman2 += 1
     if ironman2 <= 43:
         ironman += 1
@@ -526,16 +502,6 @@ def gerakan_ironman():
         ironman -= 1
     else:
         ironman2 = 1 
-
-    if ironman2 <= 15:
-        api += 0.15
-    elif ironman2 <= 71:
-        if ironman2 % 2 == 0:
-            api += 0.2
-        else:
-            api -= 0.2
-    elif ironman2 <= 86:
-        api -= 0.15
 
 def draw():    
     py5.background(255)

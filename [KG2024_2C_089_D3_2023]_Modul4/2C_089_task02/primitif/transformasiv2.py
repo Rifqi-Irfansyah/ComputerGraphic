@@ -11,22 +11,16 @@ def translate2D(tx, ty, tm=np.zeros(3)):
         return m
     return np.matmul(m, tm)
 
-def scale2D(sx, sy, refx, refy, tm):
+def scale2D(sx, sy, tm=np.zeros(3)):
     # Buat matriks skala 3x3
     m = np.identity(3)
     m[0][0] = sx
     m[1][1] = sy
-    m[0][2] = (1 - sx) * refx
-    m[1][2] = (1 - sy) * refy
     
-    # Ubah titik (x, y) menjadi bentuk homogen [x, y, 1]
-    homogeneous_point = np.array([tm[0], tm[1], 1])
-    
-    # Lakukan perkalian matriks
-    scaled_point = np.dot(m, homogeneous_point)
-    
-    # Kembalikan hasil sebagai tuple (x, y) tanpa komponen homogen
-    return scaled_point[0], scaled_point[1]
+    # Jika tidak ada titik yang diberikan, kembalikan matriks skala
+    if (tm == 0).all():
+        return m
+    return np.matmul(m, tm)
 
 
 

@@ -62,7 +62,6 @@ class Ironman(Animasi):
 
     def anime_translate(self, x, y):
         resultpoints = super().translate(x,y, self.points)
-        py5.stroke_weight(2)
         cetak_point(resultpoints, config.RED)
 
         self.pointsApi = super().scale(1,api, self.xc, self.yc-165, self.pointsApi)
@@ -206,7 +205,7 @@ class Gunungan(Animasi):
 
     def anime_rotate(self, angle):
         resultpoints = super().rotate(self.points, self.xc,self.yc-200, angle)
-        py5.stroke_weight(2.5)
+        py5.stroke_weight(2)
         cetak_point(resultpoints, config.BROWN)
     
     def gambar_gunungan(self):
@@ -485,11 +484,11 @@ x = 1
 rotate = 1
 def gerakan_gunungan():
     global rotate,x
-    x += 1
+    x += 1.5
     if(x <= 60):
-        rotate += 1
+        rotate += 1.5
     elif(x <= 120):
-        rotate -= 1
+        rotate -= 1.5
     else:
         x = 1
         rotate = 1
@@ -497,7 +496,7 @@ def gerakan_gunungan():
 pesawat = 1
 def gerakan_pesawat():
     global pesawat
-    pesawat += 1
+    pesawat += 1.5
     if(pesawat >= 230):
         pesawat = 1
 
